@@ -2,14 +2,6 @@ Welcome to my **SQL Practice Repository!**
 This repo contains my hands-on SQL exercises for learning and improving database skills.  
 Each task includes the **scenario**, **SQL query**, and **expected output**.
 ## 📋 Table of Contents
-1. [SQL Question 1 – CREATE TABLE](#sql-question-1--create-table)
-SQL Question 1: CREATE Table
-Scenario:
- You are a data analyst at City Hospital. Management wants to create a new table to store patient details.
-Task:
- Write a SQL command to create a table named Patients with fields (PatientID, PatientName, Age, Gender, AdmissionDate).
-Expected Output:**
-
 
 ## 🏥 SQL Question 1 – CREATE TABLE
 
@@ -133,7 +125,7 @@ TRUNCATE TABLE Orders;
 Expected Output:
 
 sql
-Copy code
+
 DELETE: 1 row deleted successfully.
 TRUNCATE: Table 'Orders' emptied successfully.
 
@@ -499,3 +491,83 @@ SELECT
     StudentID,
     GetFullName(FirstName, LastName) AS FullName
 FROM Students;
+
+Scenario:
+Hr wants to quickly fetch an employees details using theri ID.
+
+Task:
+create a stored procedure that accepts an employeeid and returns that employees details
+
+** SQL query 4 stored procedure
+Delimiter
+create procedure getemployeedetails(in emp_id int)
+begin select employee_id,
+first_name,
+last_name,
+department_id,
+salary from employee_id= emp_id;
+end;
+delimiter;
+call getemployeedetails(101);
+
+SQL query 5 simple view
+scenario:
+management wants a view showing employee names and their department names.
+Task
+create a view for that
+Sql query
+creat view employeedepartmentviewas
+select e.employee_name,
+d.department_name,
+from employees e
+join departments d on e.department_id= d.department_id;
+
+SQL query 6 complex view
+scenario:
+To create a view joining employees,departments,and salaries tables to show combined info.
+Task:
+write sql for a complex 
+create view employeefullinfo as
+select e.employee id,
+e.employee_name,
+d.department_name,
+s.salary_amount,
+s.bonus
+from employees e
+join departments d on e.department_id=d.department_id
+join salaries s on e.employee_id=s.employee_id;
+
+SQL Trigger
+scenario: log every deletion in the orders table.
+Task: write a trigger to insert deleted rows into order_history
+Sql query
+create trigger trg_afterorderdate after delete on orders for each row
+begin
+insert into order_history(orderid,customerid,orderdate,totalamount,deletedat)
+values(old.orderid,old.customerid,old.orderdate,
+old.totalamount,now());
+end;
+
+sql question: DCL
+scenario:grant reporting access to junior analysts
+Task: write sql using grant and revoke commands
+sql query
+---grant select permission on reports table
+grant select on reports to 'junior_analyst';
+revoke select on reports from 'junior_analyst';
+
+
+sql question : TCL
+Scenario: during a bank transfer,ensure atomicity
+Task: write sql using commit,rollback,savepoint
+sql query
+start transcation;
+update accounts
+set balance= balance-5000
+where accountid=101;
+savepoint after_debit;
+update accounts
+set balance=balance+5000
+where accountid=202;
+rollback to after_debit;
+commit;
